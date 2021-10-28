@@ -1,0 +1,17 @@
+{
+  "actions": [
+    {
+      "name": "/actions/TestingSet/in/Test1",
+      "type": "vector3",
+      "requirement": "mandatory"
+    }
+  ],
+  "action_sets": [
+    {
+      "name": "/actions/TestingSet",
+      "usage": "single"
+    }
+  ],
+  "default_bindings": [],
+  "localization": []
+}
