@@ -1,14 +1,13 @@
+#define DEBUG
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
 
+public class Tracker : MonoBehaviour {
 
-public class Test : MonoBehaviour
-{
-
-#define DEBUG
     public bool tracking_pos;
     public bool tracking_rot;
     public bool tracking_vel;
@@ -20,7 +19,7 @@ public class Test : MonoBehaviour
     private SteamVR_Controller.Device controller_left { get { return SteamVR_Controller.Input((int)controller2.index); } }
     private Valve.VR.EVRButtonId trigger = Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger;
     
-    public RigidBody rb
+    public RigidBody rb;
 
     private integer counter;
 
@@ -48,8 +47,8 @@ public class Test : MonoBehaviour
         bool right_pressed =  controller_right.GetPressUp(trigger);
         
         #if DEBUG
-            Debug.Log( $"Left button pressed: {left_pressed ? "Yes" : "No"}" );
-            Debug.Log( $"Right button pressed: {right_pressed ? "Yes" : "No"}" );
+            Debug.Log( $"Left button pressed: {(left_pressed ? "Yes" : "No")}" );
+            Debug.Log( $"Right button pressed: {(right_pressed ? "Yes" : "No")}" );
         #endif
         if (file_name != "") {
             using ( System.IO.StreamWriter file = new System.IO.StreamWriter(file_name) ) {
