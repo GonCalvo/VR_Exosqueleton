@@ -54,11 +54,11 @@ public class Tracker : MonoBehaviour {
     }
 
     void record_measure_rotation ( StreamWriter f, Quaternion rot ) {
-        f.Write( "Position:" + rot.ToString() + ";" );
+        f.Write( "Rotation:" + rot.ToString() + ";" );
     }
 
     void record_measure_velocity ( StreamWriter f, Vector3 vel ) {
-        f.Write( "Position:" + vel.ToString() + ";" );
+        f.Write( "Velocity:" + vel.ToString() + ";" );
     } 
 
 
