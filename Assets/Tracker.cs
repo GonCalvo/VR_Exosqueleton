@@ -1,10 +1,9 @@
 #define DEBUG
 
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+using System;
+using System.IO;
 using UnityEngine;
-using Valve.VR.InteractionSystem;
+using Valve.VR;
 
 public class Tracker : MonoBehaviour {
 
@@ -15,23 +14,18 @@ public class Tracker : MonoBehaviour {
 
     public SteamVR_TrackedObject controller1;
     public SteamVR_TrackedObject controller2;
-    private SteamVR_Controller.Device controller_right { get { return SteamVR_Controller.Input((int)controller1.index); } }
-    private SteamVR_Controller.Device controller_left { get { return SteamVR_Controller.Input((int)controller2.index); } }
-    private Valve.VR.EVRButtonId trigger = Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger;
     
-    public RigidBody rb;
+    public Rigidbody rb;
 
-    private integer counter;
+    private int counter;
 
     // Start is called before the first frame update
     void Start() {
 
-        bool left_pressed = controller_left.GetPressUp(trigger);
-        bool right_pressed =  controller_right.GetPressUp(trigger);
 
         if ( file_name != "" ) {
             DateTime localDate = DateTime.Now;
-            file_name = $"./Records/{file_name}/{localDate.Day}-{localDate.Month}_{localDate.Hour}-{localDate.Minute}_{this.Name}";
+            file_name = $"./Records/{file_name}/{localDate.Day}-{localDate.Month}_{localDate.Hour}-{localDate.Minute}_{this.name}";
         }
 
         rb = GetComponent<Rigidbody>();
@@ -43,17 +37,10 @@ public class Tracker : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        bool left_pressed = controller_left.GetPressUp(trigger);
-        bool right_pressed =  controller_right.GetPressUp(trigger);
-        
-        #if DEBUG
-            Debug.Log( $"Left button pressed: {(left_pressed ? "Yes" : "No")}" );
-            Debug.Log( $"Right button pressed: {(right_pressed ? "Yes" : "No")}" );
-        #endif
         if (file_name != "") {
             using ( System.IO.StreamWriter file = new System.IO.StreamWriter(file_name) ) {
                 file.Write($"{counter}_{Time.time}"+"{");
-                if ( tracking_pos ) this.record_measure_position(file, transform.pos );
+                if ( tracking_pos ) this.record_measure_position(file, transform.position );
 
                 if ( tracking_rot ) this.record_measure_rotation(file, transform.rotation );
 
