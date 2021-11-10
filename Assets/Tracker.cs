@@ -12,10 +12,8 @@ public class Tracker : MonoBehaviour {
     public bool tracking_vel;
     public string file_name = "";
 
-    public SteamVR_TrackedObject controller1;
-    public SteamVR_TrackedObject controller2;
     
-    public Rigidbody rb;
+    private Rigidbody rb;
 
     private int counter;
 

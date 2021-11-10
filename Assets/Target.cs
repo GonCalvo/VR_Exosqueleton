@@ -13,7 +13,7 @@ public class Target : MonoBehaviour {
         
     }
 
-    void target_reached() {
+    public void target_reached() {
         this.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
 
     }
