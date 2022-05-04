@@ -105,6 +105,14 @@ namespace Valve.VR
             }
         }
         
+        public virtual SteamVR_Action_Boolean DrawBrush
+        {
+            get
+            {
+                return SteamVR_Actions.default_DrawBrush;
+            }
+        }
+        
         public virtual SteamVR_Action_Vibration Haptic
         {
             get
