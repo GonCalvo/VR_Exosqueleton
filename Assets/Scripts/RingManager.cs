@@ -1,9 +1,14 @@
+
+#define DEBUG
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class RingManager : MonoBehaviour
 {
+   
     public int FIRST_DISTANCE = 120;
 
     public GameObject RING;
@@ -11,11 +16,11 @@ public class RingManager : MonoBehaviour
     public int simultaneus_rings = 3;
     public float distance_between_rings = 20;
     public int total_rings = 10;
-    public float max_delta_x = 10;
+    public float max_delta_x = 2;
     public float max_delta_y = 10;
     public float ring_size = 5;
 
-    private float speed;
+    private float speed = 0.3f;
     private int score = 0;
 
     private int spree = 0;
@@ -27,14 +32,38 @@ public class RingManager : MonoBehaviour
     private int rings_passed;
     private void OnEnable()
     {
+        float auxf = 0f;
+        int auxi = 0;
         Debug.Log("Player_name = " + PlayerPrefs.GetString("name"));
-        total_rings = PlayerPrefs.GetInt("target_number");
-        speed = PlayerPrefs.GetFloat("flight_speed");
-        ring_size = PlayerPrefs.GetFloat("target_size");
-        max_delta_x = PlayerPrefs.GetFloat("target_x_max_distance");
-        max_delta_y = PlayerPrefs.GetFloat("target_y_max_distance");
-        distance_between_rings = PlayerPrefs.GetFloat("target_z_distance");
-        ring_size = PlayerPrefs.GetInt("target_size");
+        
+        //auxi = PlayerPrefs.GetInt("target_number");
+        if (auxi != 0) total_rings = auxi;
+        Debug.Log("target_number = " + total_rings);
+
+        //auxf =  PlayerPrefs.GetFloat("flight_speed");
+        if (auxf != 0) speed = auxf;
+        Debug.Log("speed = " + speed);
+
+        //auxf = PlayerPrefs.GetFloat("target_size");
+        if (auxf != 0) ring_size = auxf;
+        Debug.Log("ring_size = " + ring_size);
+
+
+        //auxf = PlayerPrefs.GetFloat("target_x_max_distance");
+        if (auxf != 0) max_delta_x = auxf;
+        Debug.Log("max_delta_x = " + max_delta_x);
+
+        //auxf = PlayerPrefs.GetFloat("target_y_max_distance");
+        if (auxf != 0) max_delta_y = auxf;
+        Debug.Log("max_delta_y = " + max_delta_y);
+
+        //auxf = PlayerPrefs.GetFloat("target_z_distance");
+        if (auxf != 0) distance_between_rings = auxf;
+        Debug.Log("distance_between_rings = " + distance_between_rings);
+
+        //auxi = PlayerPrefs.GetInt("target_size");
+        if (auxi != 0) ring_size = auxi;
+        Debug.Log("ring_size = " + ring_size);
 
     }
 
@@ -44,7 +73,14 @@ public class RingManager : MonoBehaviour
         Debug.Log("Starting Rings");
         if (simultaneus_rings > total_rings) simultaneus_rings = total_rings;
 
-        cam_transform = this.GetComponentsInParent<Transform>()[0];
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform currentItem = transform.GetChild(i);
+            if (currentItem.name.Equals("Camera"))
+            {
+                cam_transform = currentItem.transform;
+            }
+        }
 
         initial_cam_pos = cam_transform.transform.position;
 

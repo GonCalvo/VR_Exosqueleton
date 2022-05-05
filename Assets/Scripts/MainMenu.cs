@@ -14,8 +14,8 @@ public class MainMenu : MonoBehaviour
     private float manouver_speed = 0.3f;
     private float x_threshold = 0.3f;
     private float y_threshold = 0.3f;
-    private float target_x_max_distance = 22;
-    private float target_y_max_distance = 22;
+    private float target_x_max_distance = 2;
+    private float target_y_max_distance = 2;
     private float target_z_distance = 60;
     private int target_size = 5;
     private int target_number = 10;
