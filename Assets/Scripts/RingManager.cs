@@ -14,22 +14,20 @@ public class RingManager : MonoBehaviour
     public GameObject RING;
     public GameObject SCORE_BOARD;
     public int simultaneus_rings = 3;
-    public float distance_between_rings = 20;
-    public int total_rings = 10;
+    public int total_targets = 10;
     public float max_delta_x = 2;
     public float max_delta_y = 10;
+    public float distance_between_rings = 20;
     public float ring_size = 5;
 
     private float speed = 0.3f;
-    private int score = 0;
-
-    private int spree = 0;
-    private int max_spree = 0;
 
     private Transform cam_transform;
     private Vector3 initial_cam_pos;
-    private int rings_created;
-    private int rings_passed;
+    private List<GameObject> rings;
+
+    private ScoreManager score_manager;
+
     private void OnEnable()
     {
         float auxf = 0f;
@@ -37,8 +35,8 @@ public class RingManager : MonoBehaviour
         Debug.Log("Player_name = " + PlayerPrefs.GetString("name"));
         
         //auxi = PlayerPrefs.GetInt("target_number");
-        if (auxi != 0) total_rings = auxi;
-        Debug.Log("target_number = " + total_rings);
+        if (auxi != 0) total_targets = auxi;
+        Debug.Log("target_number = " + total_targets);
 
         //auxf =  PlayerPrefs.GetFloat("flight_speed");
         if (auxf != 0) speed = auxf;
@@ -71,7 +69,7 @@ public class RingManager : MonoBehaviour
     void Start()
     {
         Debug.Log("Starting Rings");
-        if (simultaneus_rings > total_rings) simultaneus_rings = total_rings;
+        if (simultaneus_rings > total_targets) simultaneus_rings = total_targets;
 
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -86,9 +84,10 @@ public class RingManager : MonoBehaviour
 
         for (int i = 0; i < simultaneus_rings; i++)
         {
-            rings_created++;
-            CreateRing(initial_cam_pos + new Vector3(Random.Range(-max_delta_x, max_delta_x), Random.Range(-max_delta_y, max_delta_x), FIRST_DISTANCE + (i + 1) * distance_between_rings));
+            CreateRing(initial_cam_pos + new Vector3(Random.Range(-max_delta_x, max_delta_x), Random.Range(-max_delta_y, max_delta_y), FIRST_DISTANCE + (i + 1) * distance_between_rings));
         }
+
+        score_manager = new ScoreManager( total_targets, Finish );
 
     }
 
@@ -103,6 +102,7 @@ public class RingManager : MonoBehaviour
     {
         GameObject ring = Instantiate(RING);
         ring.transform.position = position;
+        rings.Add(ring);
 
         Ring ring_script = ring.GetComponent<Ring>();
         ring_script.ring_manager = this;
@@ -113,39 +113,25 @@ public class RingManager : MonoBehaviour
 
     public void RingScore( bool hit, Ring ring )
     {
-        if (hit)
+        score_manager.Score(hit);
+
+        ring.transform.position = NewRingPos(initial_cam_pos, max_delta_x, max_delta_y);
+
+    }
+
+    private void Finish()
+    {
+        gameObject.GetComponent<TerrainTiler>().speed = 0.05f;
+        GameObject scoreboard = Instantiate(SCORE_BOARD);
+        ScoreBoard scoreboard_script = scoreboard.GetComponent<ScoreBoard>();
+        scoreboard_script.camera_transform = cam_transform;
+        scoreboard_script.score = score_manager.score;
+        scoreboard_script.targets = total_targets;
+        scoreboard_script.max_spree = score_manager.max_streak;
+
+        foreach (GameObject r in rings)
         {
-            score++;
-            spree++;
-            MonoBehaviour.print("Player scored a point");
-        } 
-        else
-        {
-            if (spree > max_spree) max_spree = spree;
-            spree = 0;
+            Destroy(r);
         }
-
-        if (rings_created < total_rings)
-        {
-            rings_created++;
-            ring.transform.position = NewRingPos(initial_cam_pos, max_delta_x, max_delta_y);
-        }
-
-
-        rings_passed++;
-        MonoBehaviour.print("Rings passed: " + rings_passed);
-        if ( rings_passed == total_rings )
-        {
-            MonoBehaviour.print( "Game finished! Score: " + score + "/" + total_rings + " targets, max_spree = "+max_spree );
-            rings_passed++; // to prevent the previous condition to activate again
-            gameObject.GetComponent<TerrainTiler>().speed = 0.05f;
-            GameObject scoreboard = Instantiate(SCORE_BOARD);
-            ScoreBoard scoreboard_script = scoreboard.GetComponent<ScoreBoard>();
-            scoreboard_script.camera_transform = cam_transform;
-            scoreboard_script.score = score;
-            scoreboard_script.targets = total_rings;
-            scoreboard_script.max_spree = max_spree;
-        }
-
     }
 }
