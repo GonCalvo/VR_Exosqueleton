@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    public string game_scene;
+    public string game_scene_flying;
+    public string game_scene_targetrange;
 
 
     private string player_name = "";
@@ -19,6 +21,8 @@ public class MainMenu : MonoBehaviour
     private float target_z_distance = 60;
     private int target_size = 5;
     private int target_number = 10;
+
+    private string game_scene = "";
 
 
     // Start is called before the first frame update
@@ -35,7 +39,18 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        
+        if ( game_scene == "" )
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform currentItem = transform.GetChild(i);
+                if (currentItem.name.Equals("Dropdown"))
+                {
+                    game_scene = DropDownToString(currentItem.GetComponent<TMP_Dropdown>().value);
+                }
+            }
+        }
+        print("Loading gameScene: " + game_scene);
         SceneManager.LoadScene(game_scene);
     }
 
@@ -53,6 +68,25 @@ public class MainMenu : MonoBehaviour
     private bool is_valid_patient(string patient)
     {
         return patient.Length > 0;
+    }
+
+    public void GetGame(int option)
+    {
+        game_scene = DropDownToString(option);
+    }
+
+    private string DropDownToString(int pos)
+    {
+        switch (pos)
+        {
+            case 0:
+                return game_scene_targetrange;
+            case 1:
+                return game_scene_flying;
+            default:
+                print("No option selected");
+                return "";
+        }
     }
 
     public void getPatient(string s)

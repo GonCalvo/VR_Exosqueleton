@@ -15,6 +15,7 @@ public class TargetManager : MonoBehaviour
     public float max_delta_x = 2;
     public float max_delta_y = 10;
     public float time_between_targets = 5;
+    private float target_size = 1;
 
     private float last_target_rez_time = 0;
     private const float z_dist = 18.5f;
