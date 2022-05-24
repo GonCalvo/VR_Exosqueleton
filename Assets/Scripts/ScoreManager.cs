@@ -36,6 +36,7 @@ public class ScoreManager
             cur_streak = 0;
         }
         targets_passed++;
+        Debug.Log("Targets passed: "+targets_passed+"/"+total_targets);
         if ( targets_passed == total_targets)
         {
             targets_passed++; // prevents the previous condition from happening.

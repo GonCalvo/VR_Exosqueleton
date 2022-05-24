@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public class RingManager : MonoBehaviour
@@ -55,14 +56,27 @@ public class RingManager : MonoBehaviour
         Debug.Log("distance_between_rings = " + distance_between_rings);
 
         auxi = PlayerPrefs.GetInt("target_size");
-        if (auxi != 0) ring_size = auxi;
+        //if (auxi != 0) ring_size = auxi;
         Debug.Log("ring_size = " + ring_size);
 
     }
+    void CreateRing(Vector3 position)
+    {
+        if (RING == null) print("Ring not created");
+        GameObject ring = Instantiate(RING);
+        ring.transform.position = position;
+        rings.Add(ring);
 
+        Ring ring_script = ring.GetComponent<Ring>();
+        ring_script.ring_manager = this;
+        ring_script.speed = speed;
+        ring_script.player = cam_transform;
+        ring_script.ring_size = ring_size;
+    }
     // Start is called before the first frame update
     void Start()
     {
+        rings = new List<GameObject>();
         Debug.Log("Starting Rings");
         if (simultaneus_rings > total_targets) simultaneus_rings = total_targets;
 
@@ -79,7 +93,6 @@ public class RingManager : MonoBehaviour
 
         for (int i = 0; i < simultaneus_rings; i++)
         {
-            print("Creating ring");
             CreateRing(initial_cam_pos + new Vector3(Random.Range(-max_delta_x, max_delta_x), Random.Range(-max_delta_y, max_delta_y), FIRST_DISTANCE + (i + 1) * distance_between_rings));
         }
 
@@ -94,18 +107,7 @@ public class RingManager : MonoBehaviour
         return main_pos + new Vector3(new_x,new_y, (simultaneus_rings+1) * distance_between_rings);
     }
 
-    void CreateRing(Vector3 position)
-    {
-        GameObject ring = Instantiate(RING);
-        ring.transform.position = position;
-        rings.Add(ring);
-
-        Ring ring_script = ring.GetComponent<Ring>();
-        ring_script.ring_manager = this;
-        ring_script.speed = speed;
-        ring_script.player = cam_transform;
-        ring_script.ring_size = ring_size;
-    }
+    
 
     public void RingScore( bool hit, Ring ring )
     {

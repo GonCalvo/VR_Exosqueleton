@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using Valve.VR.Extras;
 
@@ -33,6 +30,7 @@ public class TargetManager : MonoBehaviour
     void Awake()
     {
         laserPointer.PointerIn += PointerInside;
+
         score_manager = new ScoreManager(total_targets, Finish);
         MoveTarget();
 
@@ -68,7 +66,7 @@ public class TargetManager : MonoBehaviour
     }
 
     private void Start()
-    {
+    {        
         for (int i = 0; i < transform.childCount; i++)
         {
             Transform currentItem = transform.GetChild(i);
@@ -85,14 +83,15 @@ public class TargetManager : MonoBehaviour
 
     public void PointerInside(object sender, PointerEventArgs e)
     {
-        if (e.target.transform == target.transform)
+        print("Detected object "+e.target.transform.name);
+        if (e.target.transform.name == "Target")
         {
             //Destroy(e.target.gameObject);
             if ( ! finished )
             {
                 score_manager.Score(true);
-                GameObject _explosion = Instantiate( explosion, target.transform);
-                Destroy(_explosion, 1f);
+                //GameObject _explosion = Instantiate( explosion, target.transform);
+                //Destroy(_explosion, 1f);
                 MoveTarget();
             }
         }
@@ -100,15 +99,18 @@ public class TargetManager : MonoBehaviour
 
     void Update()
     {
-        float time_since_target_moved = Time.time - last_target_rez_time;
-        if (time_since_target_moved >= time_between_targets)
+        if (!finished)
         {
-            score_manager.Score(false);
-            MoveTarget();
-        }
-        else
-        {
-            timer.GetComponent<TextMesh>().text = ((int)Math.Ceiling(time_between_targets-time_since_target_moved)).ToString();
+            float time_since_target_moved = Time.time - last_target_rez_time;
+            if (time_since_target_moved >= time_between_targets)
+            {
+                score_manager.Score(false);
+                MoveTarget();
+            }
+            else
+            {
+                timer.GetComponent<TextMesh>().text = ((int)Math.Ceiling(time_between_targets - time_since_target_moved)).ToString();
+            }
         }
     }
 
@@ -132,9 +134,12 @@ public class TargetManager : MonoBehaviour
         GameObject scoreboard = Instantiate(SCORE_BOARD);
         ScoreBoard scoreboard_script = scoreboard.GetComponent<ScoreBoard>();
         scoreboard_script.camera_transform = cam_transform;
+        scoreboard_script.DISTANCE = 3;
+        scoreboard.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         scoreboard_script.score = score_manager.score;
         scoreboard_script.targets = total_targets;
         scoreboard_script.max_spree = score_manager.max_streak;
+        Destroy(target);
     }
 }
 

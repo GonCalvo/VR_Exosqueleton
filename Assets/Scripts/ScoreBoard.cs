@@ -11,7 +11,7 @@ public class ScoreBoard : MonoBehaviour
 
     private Transform _camera_transform;
 
-    private const int DISTANCE = 30;
+    public int DISTANCE = 30;
 
 
     public int score
