@@ -17,7 +17,7 @@ public class RingManager : MonoBehaviour
     public int simultaneus_rings = 3;
     public int total_targets = 10;
     public float max_delta_x = 2;
-    public float max_delta_y = 10;
+    public float max_delta_y = 10; // NO simétricos
     public float distance_between_rings = 20;
     public float ring_size = 5;
 

@@ -77,7 +77,7 @@ public class ViveInput : MonoBehaviour
                 {
                     GameObject instantiated_corner = Instantiate(paint, corner, transform.rotation);
                     instantiated_corner.transform.GetComponent<MeshRenderer>().material.color = corner_color;
-                    //instantiated_corner.transform.localScale = new Vector3(1.05f, 1.05f, 1.05f);
+                    instantiated_corner.transform.localScale = new Vector3(.3f, .3f, .3f);
                 }
             }
         }
