@@ -83,8 +83,7 @@ public class TargetManager : MonoBehaviour
 
     public void PointerInside(object sender, PointerEventArgs e)
     {
-        print("Detected object "+e.target.transform.name);
-        if (e.target.transform.name == "Target")
+        if (e.target.transform.name == target.transform.name)
         {
             //Destroy(e.target.gameObject);
             if ( ! finished )
@@ -140,6 +139,7 @@ public class TargetManager : MonoBehaviour
         scoreboard_script.targets = total_targets;
         scoreboard_script.max_spree = score_manager.max_streak;
         Destroy(target);
+        timer.SetActive(false);
     }
 }
 
