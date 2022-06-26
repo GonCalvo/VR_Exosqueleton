@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class AsteroidManager : MonoBehaviour
 {
     public List<GameObject> asteroids_prefabs;
-    public int asteroid_num = 32;
+    public int asteroid_num = 120;
     public float speed = 0.3f;
     public float max_delta_x = 10;
     public float max_delta_y = 5;
@@ -20,29 +20,25 @@ public class AsteroidManager : MonoBehaviour
 
     private void OnEnable()
     {
-        float auxf = 0f;
-        int auxi = 0;
-        Debug.Log("Player_name = " + PlayerPrefs.GetString("name"));
+        if (DataHandler.Instance != null)
+        {
+            total_targets = DataHandler.Instance.FlyingGame.total_targets;
+            distance_between_rings = DataHandler.Instance.FlyingGame.distance_between_targets;
 
-        auxf = PlayerPrefs.GetFloat("flight_speed");
-        if (auxf != 0) speed = auxf;
-        Debug.Log("speed = " + speed);
+            float max_delta_down = DataHandler.Instance.Session.range_bottom;
+            float max_delta_up = DataHandler.Instance.Session.range_top;
+            float max_delta_right = DataHandler.Instance.Session.range_right;
+            float max_delta_left = DataHandler.Instance.Session.range_left;
 
-        auxf = PlayerPrefs.GetFloat("target_x_max_distance");
-        if (auxf != 0) max_delta_x = auxf;
-        Debug.Log("max_delta_x = " + max_delta_x);
+            max_delta_x = max_delta_right;
+            if (max_delta_x < max_delta_left) max_delta_x = max_delta_left;
+            max_delta_x *= 2;
 
-        auxf = PlayerPrefs.GetFloat("target_y_max_distance");
-        if (auxf != 0) max_delta_y = auxf;
-        Debug.Log("max_delta_y = " + max_delta_y);
+            max_delta_y = max_delta_up;
+            if (max_delta_y < max_delta_down) max_delta_y = max_delta_down;
+            max_delta_y *= 2;
 
-        auxi = PlayerPrefs.GetInt("target_number");
-        if (auxi != 0) total_targets = auxi;
-        Debug.Log("target_number = " + total_targets);
-
-        auxf = PlayerPrefs.GetFloat("target_z_distance");
-        if (auxf != 0) distance_between_rings = auxf;
-        Debug.Log("distance_between_rings = " + distance_between_rings);
+        }
     }
 
     // Start is called before the first frame update
@@ -53,7 +49,7 @@ public class AsteroidManager : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             Transform currentItem = transform.GetChild(i);
-            if (currentItem.name.Equals("Camera"))
+            if (currentItem.name.Equals("VRCamera"))
             {
                 cam_transform = currentItem.transform;
             }

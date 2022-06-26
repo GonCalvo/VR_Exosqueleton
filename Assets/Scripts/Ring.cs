@@ -9,15 +9,17 @@ public class Ring : MonoBehaviour
     public Transform player;
 
     private float _ring_size;
+    private bool has_not_passed = true;
+
+
     public float ring_size
     {
         get { return _ring_size; }
         set { 
             _ring_size = value;
-            this.transform.localScale = new Vector3(ring_size, ring_size, this.transform.localScale.z);
+            this.transform.localScale = new Vector3(ring_size, this.transform.localScale.y, ring_size);
         }
     }
-    private bool has_not_passed = true;
 
 
     // Start is called before the first frame update
