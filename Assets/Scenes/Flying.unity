@@ -441,12 +441,11 @@ MonoBehaviour:
   - {fileID: 100000, guid: 750dd6acbb669b14c8866acddb1bf76f, type: 3}
   - {fileID: 100000, guid: 87a7172321f03484a9f7bf3cdf05c6dc, type: 3}
   - {fileID: 100000, guid: dff3582f22aaef14b9c0b575cdaffa0e, type: 3}
-  asteroid_num: 64
-  speed: 0.3
-  max_delta_x: 0
-  max_delta_y: 0
+  asteroid_num: 240
+  speed: 0.1
+  max_delta: 2
   FIRST_DISTANCE: 120
-  total_targets: 0
+  total_targets: 10
 --- !u!1 &280136056
 GameObject:
   m_ObjectHideFlags: 0

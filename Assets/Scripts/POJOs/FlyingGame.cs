@@ -11,8 +11,8 @@ public class FlyingGame: Game
 	public int expected_targets_hit;
 	public int maximum_streak;
 	public int expected_max_streak;
-	public int targets_hit_importance;
-	public int max_streak_importance;
+	public int targets_hit_weight;
+	public int max_streak_weight;
 	public int calification_targets_hit;
 	public int calification_max_streak;
 	public int targets_hit_difficulty;
@@ -32,8 +32,8 @@ public class FlyingGame: Game
 		this.maximum_streak = maximum_streak;
 		this.expected_max_streak = expected_max_streak;
 		this.GAS_score = GAS_score;
-		this.targets_hit_importance = targets_hit_importance;
-		this.max_streak_importance = max_streak_importance;
+		this.targets_hit_weight = targets_hit_importance;
+		this.max_streak_weight = max_streak_importance;
 		this.calification_max_streak = calification_max_streak;
 		this.calification_targets_hit = calification_targets_hit;
 	}
@@ -47,14 +47,14 @@ public class FlyingGame: Game
         this.targets_size = targets_size;
         this.expected_targets_hit = expected_targets_hit;
         this.expected_max_streak = expected_max_streak;
-        this.targets_hit_importance = targets_hit_importance * targets_hit_difficulty;
-        this.max_streak_importance = max_streak_importance * max_streak_difficulty;
+        this.targets_hit_weight = targets_hit_importance * targets_hit_difficulty;
+        this.max_streak_weight = max_streak_importance * max_streak_difficulty;
     }
 
-	public double CalculateGASScore()
+	public float CalculateGASScore()
     {
-		double weight_sum_squared = Math.Pow(targets_hit_importance + max_streak_importance, 2);
-		GAS_score = (float) (50 + 10*(calification_targets_hit * targets_hit_importance + calification_max_streak * max_streak_importance)/
+		double weight_sum_squared = Math.Pow(targets_hit_weight + max_streak_weight, 2);
+		GAS_score = (float) (50 + 10*(calification_targets_hit * targets_hit_weight + calification_max_streak * max_streak_weight)/
 			Math.Sqrt(0.7*weight_sum_squared + 0.3 * weight_sum_squared ) );
 		return GAS_score;
     }

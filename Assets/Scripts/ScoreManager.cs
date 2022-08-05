@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ScoreManager
 {
     public int score;
@@ -36,7 +32,6 @@ public class ScoreManager
             cur_streak = 0;
         }
         targets_passed++;
-        Debug.Log("Targets passed: "+targets_passed+"/"+total_targets);
         if ( targets_passed == total_targets)
         {
             targets_passed++; // prevents the previous condition from happening.

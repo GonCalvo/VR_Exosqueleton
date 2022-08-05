@@ -6,10 +6,9 @@ using Random = UnityEngine.Random;
 public class AsteroidManager : MonoBehaviour
 {
     public List<GameObject> asteroids_prefabs;
-    public int asteroid_num = 120;
+    public int asteroid_num = 240;
     public float speed = 0.3f;
-    public float max_delta_x = 10;
-    public float max_delta_y = 5;
+    public float max_delta = 2;
     public float FIRST_DISTANCE = 120;
     public int total_targets = 10;
 
@@ -30,13 +29,11 @@ public class AsteroidManager : MonoBehaviour
             float max_delta_right = DataHandler.Instance.Session.range_right;
             float max_delta_left = DataHandler.Instance.Session.range_left;
 
-            max_delta_x = max_delta_right;
-            if (max_delta_x < max_delta_left) max_delta_x = max_delta_left;
-            max_delta_x *= 2;
-
-            max_delta_y = max_delta_up;
-            if (max_delta_y < max_delta_down) max_delta_y = max_delta_down;
-            max_delta_y *= 2;
+            max_delta = max_delta_right;
+            if (max_delta < max_delta_left) max_delta = max_delta_left;
+            if (max_delta < max_delta_up) max_delta = max_delta_up;
+            if (max_delta < max_delta_down) max_delta = max_delta_down;
+            max_delta *= 3;
 
         }
     }
@@ -58,12 +55,18 @@ public class AsteroidManager : MonoBehaviour
         initial_cam_pos = cam_transform.transform.position;
         asteroids = new List<GameObject>();
 
+        float meters_per_asteroid = ((total_targets + 1) * distance_between_rings) / asteroid_num;
+        Debug.Log("meters per asteroid?: "+meters_per_asteroid);
+
         for (int i = 0; i < asteroid_num; i++)
         {
-            float x = Random.Range(max_delta_x, max_delta_x * 2) * Mathf.Pow(-1, Random.Range(0,2));
-            float y = Random.Range(max_delta_y, max_delta_y * 2) * Mathf.Pow(-1, Random.Range(0, 2));
-            float z = Random.Range(FIRST_DISTANCE, (total_targets + 1) * distance_between_rings);
+            float radius = Random.Range(max_delta, max_delta * 4);
+            float angle = Random.Range(0, 2*Mathf.PI);
+            float x = radius * Mathf.Cos(angle);
+            float y = radius * Mathf.Sin(angle);
+            float z = FIRST_DISTANCE + meters_per_asteroid * i + Random.Range(0f, 0.5f);
             CreateAsteroid(initial_cam_pos + new Vector3(x, y, z));
+            Debug.Log("Asteroid created on position " + x + "," + y + "," + z);
         }
 
 
@@ -78,10 +81,11 @@ public class AsteroidManager : MonoBehaviour
                 asteroid.transform.position = asteroid.transform.position + new Vector3(0, 0, -speed);
             }
             else
-            {
-
-                float x = Random.Range(max_delta_x, max_delta_x * 2) * Mathf.Pow(-1, Random.Range(0, 2));
-                float y = Random.Range(max_delta_y, max_delta_y * 2) * Mathf.Pow(-1, Random.Range(0, 2));
+            { 
+                float radius = Random.Range(max_delta, max_delta * 4);
+                float angle = Random.Range(0, 2 * Mathf.PI);
+                float x = radius * Mathf.Cos(angle);
+                float y = radius * Mathf.Sin(angle);
                 float z = (total_targets + 1) * distance_between_rings;
                 asteroid.transform.position = new Vector3(x, y, z);
             }

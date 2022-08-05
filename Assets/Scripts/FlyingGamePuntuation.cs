@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -70,6 +69,8 @@ public class FlyingGamePuntuation : MonoBehaviour
         DataHandler.Instance.FlyingGame.CalculateGASScore();
 
         DataHandler.SQLmanager.insertFlyingGame(DataHandler.Instance.FlyingGame);
+        DataHandler.Instance.Session.flying_games.Add(DataHandler.Instance.FlyingGame);
+        DataHandler.Instance.FlyingGame = null;
         SceneManager.LoadScene("Calibracion");
     }
 }

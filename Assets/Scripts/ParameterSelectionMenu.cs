@@ -50,7 +50,9 @@ public class ParameterSelectionMenu : MonoBehaviour
         }
 
         //calculate rules
-        RuleSystem rules = new RuleSystem(DataHandler.SQLmanager.getLast3SessionsFlyingGamesByPlayer(DataHandler.Instance.Player));
+        List<FlyingGame> games = DataHandler.SQLmanager.getLast3SessionsFlyingGamesByPlayer(DataHandler.Instance.Player);
+        games.AddRange(DataHandler.Instance.Session.flying_games);
+        Prediction rules = new Prediction(games);
         dist_between_targets_IF.text = rules.GetDistBetweenTargets().ToString();
         total_targets_IF.text = rules.GetTargets().ToString();
         target_size_IF.text = rules.GetTargetSize().ToString();
@@ -116,9 +118,9 @@ public class ParameterSelectionMenu : MonoBehaviour
         string exercise = getExerciseFromDropDown(game_selector.value);
         if (exercise == "AsteroidParameter")
         {
-            int dist_between_targets = int.Parse(dist_between_targets_IF.text);
+            float dist_between_targets = float.Parse(dist_between_targets_IF.text);
             int total_targets = int.Parse(total_targets_IF.text);
-            int targets_size = int.Parse(target_size_IF.text);
+            float targets_size = float.Parse(target_size_IF.text);
             int total_targets_objective = int.Parse(total_targets_objective_IF.text);
             int max_streak_objective = int.Parse(max_streak_objective_IF.text);
             int total_targets_importance = total_targets_importance_IF.value;

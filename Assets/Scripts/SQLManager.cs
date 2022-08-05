@@ -97,8 +97,8 @@ public class SQLManager
                 "expected_targets_hit INTEGER," +
                 "maximum_streak INTEGER," +
                 "expected_max_streak INTEGER," +
-                "total_targets_importance INTEGER," +
-                "max_streak_importance INTEGER," +
+                "total_targets_weight INTEGER," +
+                "max_streak_weight INTEGER," +
                 "targets_hit_puntuation INTEGER," +
                 "max_streak_puntuation INTEGER,"+
                 "GAS_score REAL)";
@@ -280,12 +280,12 @@ public class SQLManager
 
         var parameterMaxStreakImportance = command.CreateParameter();
         parameterMaxStreakImportance.ParameterName = "$max_streak_importance";
-        parameterMaxStreakImportance.Value = f.max_streak_importance;
+        parameterMaxStreakImportance.Value = f.max_streak_weight;
         command.Parameters.Add(parameterMaxStreakImportance);
 
         var parameterTargetsHitImportance = command.CreateParameter();
         parameterTargetsHitImportance.ParameterName = "total_targets_importance";
-        parameterTargetsHitImportance.Value = f.targets_hit_importance;
+        parameterTargetsHitImportance.Value = f.targets_hit_weight;
         command.Parameters.Add(parameterTargetsHitImportance);
 
         var paramTargetsHitPoints = command.CreateParameter();
@@ -543,8 +543,8 @@ public class SQLManager
                 int max_streak = reader.GetInt16(7);
                 int expected_max_streak = reader.GetInt16(8);
 
-                int targets_hit_importance = reader.GetInt16(9);
-                int max_streak_importance = reader.GetInt16(10);
+                int targets_hit_weight = reader.GetInt16(9);
+                int max_streak_weight = reader.GetInt16(10);
 
                 int total_targets_punctuation = reader.GetInt16(11);
                 int max_streak_punctuation = reader.GetInt16(12);
@@ -552,7 +552,7 @@ public class SQLManager
                 float gas_score = reader.GetFloat(13);
 
                 game = new FlyingGame(game_id, session_id, dist_between_targets, total_targets, target_size, targets_hit, expected_targets_hit, max_streak, expected_max_streak, 
-                    targets_hit_importance, max_streak_importance, total_targets_punctuation, max_streak_punctuation, gas_score);
+                    targets_hit_weight, max_streak_weight, total_targets_punctuation, max_streak_punctuation, gas_score);
 
                 games.Add(game);
             }
